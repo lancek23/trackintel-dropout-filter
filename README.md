@@ -6,7 +6,13 @@
 3. Code Files Usage
 
 ## Introduction
-TODO
+This repository first presents a weakness of the Sliding Window Staypoint Detection algorithm (see the original paper [here](https://dl.acm.org/doi/abs/10.1145/1463434.1463477)), specifically using the implementation in the Trackintel library for trajectory analysis (see Trackintel [repository](https://github.com/mie-lab/trackintel) and [documentation](https://trackintel.readthedocs.io/en/latest/)). Second, it provides a function for a solution to this issue.
+
+The weakness is as follows: GPS trajectory data often experiences data dropout- times in which the user being tracked does not transmit any data. This may be caused by device malfunction, user error, device batteries dying, or environmental factors such as tunnels. The staypoint detection algorithm therefore provides functionality to handle this data dropout. In the Trackintel library, this is handled with the "gap_threshold" parameter, which is a time delta. Any amount of data dropout taking place during a staypoint which lasts for less than the gap_threshold can be ignored and simply included in the staypoint.
+
+However, if there is an amount of data dropout during the trajectory which is (1) long enough to constitute a staypoint, but (2) short enough to be under the gap threshold, the algorithm will identify a staypoint at this time, even if the user is in the middle of a tripleg, creating spurious staypoints.
+
+The solution we provide then, is as follows: simply identify the sufficiently long dropouts in the trajectory, then compare their start times with those of the identified staypoints. We demonstrate this on two datasets- T-drive, a collection of trajectories from taxis, and Geolife, a collection of trajectories from volunteers over different modalities.
 
 ## Setup Guide
 ##### Downloading the data
